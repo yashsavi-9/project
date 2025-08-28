@@ -100,7 +100,7 @@ def calculate_team_stats(df):
     def predict_match(model, local_team, visitor_team, season, division, round_val,
                   local_encoder, visitor_encoder, season_encoder, division_encoder,
                   round_encoder, team_stats):
-    """Make prediction for a match"""
+    
     try:
         # Encode team names
         if local_team not in local_encoder.classes_:
