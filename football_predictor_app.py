@@ -97,61 +97,61 @@ def calculate_team_stats(df):
         }
     
     return team_stats
-    def predict_match(model, local_team, visitor_team, season, division, round_val,
-                  local_encoder, visitor_encoder, season_encoder, division_encoder,
-                  round_encoder, team_stats):
-    
-     try:
+
+def predict_match(model, local_team, visitor_team, season, division, round_val,
+                local_encoder, visitor_encoder, season_encoder, division_encoder,
+                round_encoder, team_stats):
+
+    try:
         # Encode team names
         if local_team not in local_encoder.classes_:
             st.warning(f"Warning: {local_team} not in training data. Using default encoding.")
             local_encoded = 0
         else:
             local_encoded = local_encoder.transform([local_team])[0]
-
+            
         if visitor_team not in visitor_encoder.classes_:
             st.warning(f"Warning: {visitor_team} not in training data. Using default encoding.")
             visitor_encoded = 0
         else:
             visitor_encoded = visitor_encoder.transform([visitor_team])[0]
-
+        
         # Encode other features
         season_encoded = season_encoder.transform([season])[0] if season in season_encoder.classes_ else 0
         division_encoded = division_encoder.transform([division])[0] if division in division_encoder.classes_ else 0
         round_encoded = round_encoder.transform([round_val])[0] if round_val in round_encoder.classes_ else 0
-
+        
         # Get current date features
         current_date = datetime.now()
         month = current_date.month
         day_of_week = current_date.weekday()
-
+        
         # Get team statistics
         local_win_rate = team_stats.get(local_team, {}).get('win_rate', 0.5)
         visitor_win_rate = team_stats.get(visitor_team, {}).get('win_rate', 0.5)
         local_draw_rate = team_stats.get(local_team, {}).get('draw_rate', 0.3)
         visitor_draw_rate = team_stats.get(visitor_team, {}).get('draw_rate', 0.3)
-
+        
         # Create feature array
         features = np.array([[
-            local_encoded, visitor_encoded, season_encoded, division_encoded,
+            local_encoded, visitor_encoded, season_encoded, division_encoded, 
             round_encoded, month, day_of_week, local_win_rate, visitor_win_rate,
             local_draw_rate, visitor_draw_rate
         ]])
-
+        
         # Make prediction
         prediction = model.predict(features)[0]
         probabilities = model.predict_proba(features)[0]
-
+        
         # Get class names
         classes = model.classes_
         prob_dict = {classes[i]: probabilities[i] for i in range(len(classes))}
-
+        
         return prediction, prob_dict
-
-     except Exception as e:
+        
+    except Exception as e:
         st.error(f"Error making prediction: {str(e)}")
         return None, None
-
 
 def main():
     # Header
