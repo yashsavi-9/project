@@ -101,7 +101,7 @@ def calculate_team_stats(df):
                   local_encoder, visitor_encoder, season_encoder, division_encoder,
                   round_encoder, team_stats):
     
-    try:
+     try:
         # Encode team names
         if local_team not in local_encoder.classes_:
             st.warning(f"Warning: {local_team} not in training data. Using default encoding.")
@@ -148,7 +148,7 @@ def calculate_team_stats(df):
 
         return prediction, prob_dict
 
-    except Exception as e:
+     except Exception as e:
         st.error(f"Error making prediction: {str(e)}")
         return None, None
 
