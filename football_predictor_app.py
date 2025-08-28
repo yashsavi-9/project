@@ -97,7 +97,8 @@ def calculate_team_stats(df):
         }
     
     return team_stats
-    """Make prediction for a match"""
+    def predict_match():
+        """Make prediction for a match"""
     try:
         # Encode team names
         if local_team not in local_encoder.classes_:
